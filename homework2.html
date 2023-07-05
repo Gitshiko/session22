@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homework2</title>
+</head>
+<body>
+
+    <h1>List of Earthquakes</h1>
+    <ul class="e-quakes"></ul>
+    <hr>
+    <h2>Chosen Earthquake</h2>
+    <div class="chosen"></div>
+
+    <script>
+        const ul = document.querySelector('.e-quakes');
+        const chosenEq = document.querySelector('.chosen');
+
+        
+        fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson')
+        .then((response) => response.json())
+        .then((outputData) => {
+            const earthQuakes = outputData.features;
+            console.log(earthQuakes)                   
+
+            for (let i = 0; i < earthQuakes.length; i++) {
+                printList(earthQuakes[i]);
+            }
+            printChosen(earthQuakes[1])
+       });
+
+        
+            function printList(item){
+            const listItem = `<li>
+               <h4>${item.properties.title}</h4>
+               <p>Location: ${item.geometry.coordinates}</p>
+               <p>Magnitude: ${item.properties.mag}</p>
+           </li>`
+            ul.insertAdjacentHTML('beforeend', listItem);
+       }
+
+
+        function printChosen(oneItem){
+            const description = `
+                <h4>${oneItem.properties.title}</h4>
+                <p>Location: ${oneItem.geometry.coordinates}</p>
+                <p>Time: ${oneItem.properties.time}</p>
+                <p>Magnitude: ${oneItem.properties.mag}</P>
+                <a href="${oneItem.properties.url}" target="_blank">Details</a>
+            `
+            chosenEq.innerHTML = description;
+            
+        }
+
+    </script>
+</body>
+</html>

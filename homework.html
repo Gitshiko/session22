@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homework</title>
+</head>
+<body>
+
+    <h1 style="text-align: center;"></h1>
+    <p style="text-align: center;"></p>
+    <img src="" alt="" style="border: 1px solid; position: relative; left: 46.5%;">
+    <hr>
+    <h2>Users</h2>
+    <ul class='users'></ul>
+    
+    <script>
+        const ul = document.querySelector('.users');
+
+        fetch('https://reqres.in/api/users/2')
+        .then((responseObject) => responseObject.json())
+        .then ((outputData1) => {
+            const oneUser = outputData1.data;
+            console.log(oneUser);
+            printUser(oneUser);
+        });
+
+        function printUser(object){
+            document.getElementsByTagName('h1')[0].innerHTML = object.first_name + ' ' + object.last_name;
+            document.getElementsByTagName('p')[0].innerHTML = object.email;
+            document.getElementsByTagName('img')[0].src = object.avatar;
+        }
+
+        fetch('https://reqres.in/api/users?page=2')
+        .then((responsePage) => responsePage.json())
+        .then((outputData2) => {
+            const users = outputData2.data;
+            console.log(users);
+
+            for (let i = 0; i < users.length; i++) {
+                printUsersList(users[i]);
+            }
+        });
+
+        function printUsersList(oneInArray){
+            const listItem = `<li>
+                <p>${oneInArray.first_name} ${oneInArray.last_name}</p>
+                <img src=${oneInArray.avatar} alt="" width="100">
+                </li>`;
+
+            console.log(listItem);
+            ul.insertAdjacentHTML('beforeend', listItem);
+        }
+
+
+
+    </script>
+    
+</body>
+</html>
